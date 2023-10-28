@@ -32,21 +32,21 @@ def get_dl_trends(res):
         print("Error Code:" + rescode)
 
     result = json.loads(response_data)
-    print(result)
+    #print(result)
 
     date = [a['period'] for a in result['results'][0]['data']]
     ratio_data1 = [a['ratio'] for a in result['results'][0]['data']]
 
-    df = pd.DataFrame({'date':date,
+    dl_data = pd.DataFrame({'date':date,
                   'naver_datalab_d':ratio_data1})
 
-    print(df)
+    print(dl_data.head())
 
-    #figure = px.line(df, x="date", y="naver_datalab_d", title="결과")
+    #figure = px.line(dl_data, x="date", y="naver_datalab_d", title="결과")
     #figure.show()
 
-    df_dict = df.to_dict()
-    return JsonResponse(df_dict)
+    #dl_data_dict = dl_data.to_dict()
+    return dl_data
 
 def get_go_trends(req):
     pytrends = TrendReq(hl='ko', tz=540)
@@ -68,9 +68,9 @@ def get_go_trends(req):
     go_data['date'] = go_data['date'].dt.strftime('%Y-%m-%d')
 
     go_data.rename(columns={'BTS':'pytrend_d'}, inplace=True)
-    print(go_data)
+    print(go_data.head())
 
-    go_dict = go_data.to_dict()
+    #go_dict = go_data.to_dict()
 
-    return JsonResponse(go_dict)
+    return go_data
 
