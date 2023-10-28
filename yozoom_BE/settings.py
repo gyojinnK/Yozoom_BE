@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'datalabapp',
-    'pytrendapp',
+    'call_datas_app',
     'ai_analysis'
 ]
 
