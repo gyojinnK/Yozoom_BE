@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PytrendappConfig(AppConfig):
+class CallDatasAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'pytrendapp'
+    name = 'call_datas_app'
