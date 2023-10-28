@@ -21,5 +21,5 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', views.test_view),
-    path('pytrendapp/', include('pytrendapp.urls'))
+    path('call_datas_app/', include('call_datas_app.urls'))
 ]
