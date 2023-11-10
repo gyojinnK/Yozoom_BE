@@ -82,8 +82,11 @@ def predict_values(model, X_input):
 
 
 def analysis_view(res):
-    go_datas = get_go_trends(res)
-    dl_datas = get_dl_trends(res)
+    go_datas_json = get_go_trends(res)
+    dl_datas_json = get_dl_trends(res)
+    go_datas = pd.read_json(go_datas_json)
+    dl_datas = pd.read_json(dl_datas_json)
+
     mg = pd.merge(go_datas, dl_datas, on='date')
     mg.drop('isPartial', axis=1, inplace=True)
     mg['pytrend_d'].fillna(mg['pytrend_d'].mean(), inplace=True)
