@@ -64,7 +64,7 @@ def get_dl_trends(req):
 
         return JsonResponse(dl_data_dict)
     else:
-        return "Bip! Error..."
+        return JsonResponse({'Error':'Bip! Error...'})
 
 def get_go_trends(req):
     pytrends = TrendReq(hl='ko', tz=540)
@@ -73,7 +73,7 @@ def get_go_trends(req):
     if req.method == 'GET':
         keyword = str(req.GET.get('keyword'))
         print("Getting keyword : ", keyword)
-        keyword = keyword.replace(" ", "")
+        keyword = keyword.replace(" ", "").lower()
         keywords = []
         if keyword.find(',') :
             keywords = keyword.split(sep=',')
@@ -87,8 +87,8 @@ def get_go_trends(req):
 
         # 현재를 기준으로 1년동안으로 시간 설정
         now = datetime.now()
-        end_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-        start_date = str(now.year - 3) + '-' + str(now.month) + '-' + str(now.day)
+        end_date = now.strftime("%Y-%m-%d")
+        start_date = (now - relativedelta(years=5)).strftime("%Y-%m-%d")
         time_frame = start_date + ' ' + end_date
 
         pytrends.build_payload(keywords, cat=0, timeframe=time_frame, geo='KR')
@@ -96,7 +96,7 @@ def get_go_trends(req):
         go_data = go_data.reset_index()
 
         # date를 문자열로 변환: date 컬럼의 타입이 timestamp라 JSon형식으로 맞추기위해 진행
-        #go_data['date'] = go_data['date'].dt.strftime('%Y-%m-%d')
+        go_data['date'] = go_data['date'].dt.strftime('%Y-%m-%d')
 
         print(go_data.head())
 
@@ -106,5 +106,5 @@ def get_go_trends(req):
 
         return JsonResponse(go_data_dict)
     else:
-        return "Bip! Error..."
+        return JsonResponse({'Error':'Bip! Error...'})
 
