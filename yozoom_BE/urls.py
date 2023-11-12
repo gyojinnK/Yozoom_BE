@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', views.test_view),
     path('call_datas_app/', include('call_datas_app.urls')),
-    path('ai_analysis/', include('ai_analysis.urls'))
+    path('ai_analysis/', include('ai_analysis.urls')),
+    path('call_relative_topic/', include('call_relative_topic.urls')),
 ]
