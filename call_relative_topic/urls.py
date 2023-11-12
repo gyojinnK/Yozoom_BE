@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import get_go_trends, get_dl_trends
+from .views import get_relTopic
 
 urlpatterns =[
-    path('get-go-trends/', get_go_trends),
-    path('get-dl-trends/', get_dl_trends),
+    path('get-relative-topic/', get_relTopic),
 ]
