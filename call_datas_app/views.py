@@ -15,7 +15,7 @@ def get_dl_trends(req):
 
     now = datetime.now()
     end_date = now.strftime("%Y-%m-%d")
-    start_date = (now - relativedelta(years=5)).strftime("%Y-%m-%d")
+    start_date = (now - relativedelta(years=2)).strftime("%Y-%m-%d")
 
 
     if req.method == 'GET':
@@ -24,7 +24,7 @@ def get_dl_trends(req):
         body_dict = {
             "startDate": start_date,
             "endDate": end_date,
-            "timeUnit": "date",
+            "timeUnit": "month",
             "keywordGroups": [
                 {
                     "groupName": keyword,
@@ -56,7 +56,7 @@ def get_dl_trends(req):
         ratio_data1 = [a['ratio'] for a in result['results'][0]['data']]
 
         dl_data = pd.DataFrame({'date': date,
-                                'naver_datalab_d': ratio_data1})
+                                keyword : ratio_data1})
         print(dl_data.head())
         dl_data_dict = dl_data.to_dict()
 
@@ -88,7 +88,7 @@ def get_go_trends(req):
         # 현재를 기준으로 1년동안으로 시간 설정
         now = datetime.now()
         end_date = now.strftime("%Y-%m-%d")
-        start_date = (now - relativedelta(years=5)).strftime("%Y-%m-%d")
+        start_date = (now - relativedelta(years=1)).strftime("%Y-%m-%d")
         time_frame = start_date + ' ' + end_date
 
         pytrends.build_payload(keywords, cat=0, timeframe=time_frame, geo='KR')
