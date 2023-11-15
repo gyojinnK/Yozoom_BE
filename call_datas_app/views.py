@@ -69,7 +69,7 @@ def get_dl_trends(req):
             print(dl_data.head())
 
         #concated_df = pd.concat(df_list, axis=1).groupby(level=0, axis=1).first()
-        merged_df = reduce(lambda left, right: pd.merge(left, right, on='key_column'), df_list)
+        merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), df_list)
         print('===== merged DF =====')
         print(merged_df.head())
 
