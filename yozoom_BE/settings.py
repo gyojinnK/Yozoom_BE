@@ -134,4 +134,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # cloudtype
 # 로컬 호스트를 -> 가상 호스트로 변경
 # CORS 설정 맞추기
-# 
+# ALLOWED_HOST에 cloudtype을 이용해 배포한 백엔드 url 추가
+# 프론트엔드 요청URL 변경
