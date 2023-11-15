@@ -130,3 +130,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# cloudtype
+# 로컬 호스트를 -> 가상 호스트로 변경
+# CORS 설정 맞추기
+# 
