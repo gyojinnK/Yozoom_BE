@@ -7,62 +7,84 @@ import json
 import pandas as pd
 import plotly.express as px
 from dateutil.relativedelta import relativedelta
+from googletrans import Translator
 
 def get_dl_trends(req):
     client_id = 'jtuR5ZJeQlYPlKMUJLwh'
     client_secret = 'JgrcAQiQqC'
     url = "https://openapi.naver.com/v1/datalab/search"
+    translator = Translator()
 
     now = datetime.now()
     end_date = now.strftime("%Y-%m-%d")
     start_date = (now - relativedelta(years=2)).strftime("%Y-%m-%d")
 
 
+    def call_dl(keywords):
+        df_list = []
+        for word in keywords:
+            ts_word = translator.translate(word, src='ko', dest='en')
+            print('transedWord: ', ts_word.text)
+            body_dict = {
+                "startDate": start_date,
+                "endDate": end_date,
+                "timeUnit": "month",
+                "keywordGroups": [
+                    {
+                        "groupName": word,
+                        "keywords": [word, ts_word.text]
+                    }
+                ],
+                "device": "pc",
+                "ages": ["1", "2"],
+                "gender": "f"
+            }
+
+            body = json.dumps(body_dict)
+
+            request = urllib.request.Request(url)
+            request.add_header("X-Naver-Client-Id", client_id)
+            request.add_header("X-Naver-Client-Secret", client_secret)
+            request.add_header("Content-Type", "application/json")
+            response = urllib.request.urlopen(request, data=body.encode("utf-8"))
+            rescode = response.getcode()
+            if (rescode == 200):
+                response_body = response.read()
+                response_data = response_body.decode('utf-8')
+            else:
+                print("Error Code:" + rescode)
+
+            result = json.loads(response_data)
+
+            date = [a['period'] for a in result['results'][0]['data']]
+            ratio_data1 = [a['ratio'] for a in result['results'][0]['data']]
+
+            dl_data = pd.DataFrame({'date': date,
+                                    word: ratio_data1})
+            df_list.append(dl_data)
+            print(dl_data.head())
+
+        concated_df = pd.concat(df_list, axis=1).groupby(level=0, axis=1).first()
+
+        return concated_df
+
     if req.method == 'GET':
         keyword = str(req.GET.get('keyword'))
         print(keyword)
-        body_dict = {
-            "startDate": start_date,
-            "endDate": end_date,
-            "timeUnit": "month",
-            "keywordGroups": [
-                {
-                    "groupName": keyword,
-                    "keywords": [keyword, "english"]
-                }
-            ],
-            "device": "pc",
-            "ages": ["1", "2"],
-            "gender": "f"
-        }
-
-        body = json.dumps(body_dict)
-
-        request = urllib.request.Request(url)
-        request.add_header("X-Naver-Client-Id", client_id)
-        request.add_header("X-Naver-Client-Secret", client_secret)
-        request.add_header("Content-Type", "application/json")
-        response = urllib.request.urlopen(request, data=body.encode("utf-8"))
-        rescode = response.getcode()
-        if (rescode == 200):
-            response_body = response.read()
-            response_data = response_body.decode('utf-8')
+        keyword = keyword.replace(" ", "").lower()
+        keywords = []
+        if keyword.find(','):
+            keywords = keyword.split(sep=',')
+            print('splited Keywords : ', keywords)
+            dl_df = call_dl(keywords)
         else:
-            print("Error Code:" + rescode)
+            keywords = [keyword]
+            print('normal Keywords : ', keywords)
+            dl_df = call_dl(keywords)
 
-        result = json.loads(response_data)
-
-        date = [a['period'] for a in result['results'][0]['data']]
-        ratio_data1 = [a['ratio'] for a in result['results'][0]['data']]
-
-        dl_data = pd.DataFrame({'date': date,
-                                keyword : ratio_data1})
-        print(dl_data.head())
-        dl_data_dict = dl_data.to_dict()
-
-        print(dl_data_dict)
-
-        return JsonResponse(dl_data_dict)
+        dl_df_dict = dl_df.to_dict()
+        print(dl_df_dict)
+        return JsonResponse(dl_df_dict)
     else:
         return JsonResponse({'Error':'Bip! Error...'})
 
