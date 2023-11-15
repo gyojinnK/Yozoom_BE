@@ -8,6 +8,7 @@ import pandas as pd
 import plotly.express as px
 from dateutil.relativedelta import relativedelta
 from googletrans import Translator
+from functools import reduce
 
 def get_dl_trends(req):
     client_id = 'jtuR5ZJeQlYPlKMUJLwh'
@@ -64,11 +65,15 @@ def get_dl_trends(req):
             dl_data[word] = dl_data[word].fillna(method='ffill')
 
             df_list.append(dl_data)
+            print('===== ', word, ' =====')
             print(dl_data.head())
 
-        concated_df = pd.concat(df_list, axis=1).groupby(level=0, axis=1).first()
+        #concated_df = pd.concat(df_list, axis=1).groupby(level=0, axis=1).first()
+        merged_df = reduce(lambda left, right: pd.merge(left, right, on='key_column'), df_list)
+        print('===== merged DF =====')
+        print(merged_df.head())
 
-        return concated_df
+        return merged_df
 
     if req.method == 'GET':
         keyword = str(req.GET.get('keyword'))
