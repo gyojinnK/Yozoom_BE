@@ -60,7 +60,7 @@ def get_dl_trends(req):
             ratio_data1 = [a['ratio'] for a in result['results'][0]['data']]
 
             dl_data = pd.DataFrame({'date': date, word: ratio_data1})
-            dl_data.fillna(method='ffill', inplace=True)
+            dl_data[word].fillna(method='ffill', inplace=True)
             df_list.append(dl_data)
             print(dl_data.head())
 
