@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-z5&)s$qsb(7@c1_y8wh6_=r#7m@kjv0_^th(i*d%cw1uqkc-j^
 DEBUG = True
 
 # cloudtype의 호스트 허용
-ALLOWED_HOSTS = ['port-0-yozoom-be-5mk12alozx9jlq.sel5.cloudtype.app']
+ALLOWED_HOSTS = ['port-0-yozoom-be-5mk12alozx9jlq.sel5.cloudtype.app', 'localhost']
 
 
 # Application definition
