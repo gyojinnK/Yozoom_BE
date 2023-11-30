@@ -111,7 +111,6 @@ def get_go_trends(req):
             keywords = [keyword]
             print('normal Keywords : ', keywords)
 
-
         #kw_list = ["BTS"]  # 한번에 5개 키워드 제한
 
         # 현재를 기준으로 1년동안으로 시간 설정
